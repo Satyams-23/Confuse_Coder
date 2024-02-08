@@ -1,0 +1,13 @@
+//////DSA Basics | Data Structures and Algorithms for Beginners /////////////
+
+# intro of dsa 
+
+Data Structure (arrays, linked lists, stacks, queues, trees, and graphs)
+
+Algorithm ( sorting, searching)
+
+Time complexity and space complexity
+
+BIg o notation O(n), O(1), O(log)
+
+
