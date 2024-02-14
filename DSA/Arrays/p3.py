@@ -1,67 +1,50 @@
-# sum of array
+# Given an array of integers nums and an integer target, return the indices of the two numbers that add up to the target.
 
-def sum(arr):
-    n = len(arr)
-    sum = 0
-    for i in range(n):
-        sum = sum + arr[i]
-    return sum
+# nums = [2,7,11,15], target = 22   
 
+# Output: [1,3] 
 
+# ///////Worst CASE SCENARIO////////  O(n^2)  ///////Worst CASE SCENARIO////////  
 
+# def func(nums, target):
+#     for i in range(len(nums)):
 
-arr = [1, 2, 3, 4, 5]
-print(sum(arr))
-
-
-# Rotate Array by k steps
-
-def rotate_array(nums, k):
-    n = len(nums)
-    k %= n 
-    # To handle cases where k is larger than the array length
-    
-    # Reverse the entire array
-    reverse(nums, 0, n - 1)
-    # 7, 6, 5, 4, 3, 2, 1 
-    
-    # Reverse the first k elements
-    reverse(nums, 0, k - 1)
-    # 5, 6, 7, 4, 3, 2, 1   
-    
-    # # Reverse the remaining elements
-    reverse(nums, k, n - 1)
-    # 5, 6, 7, 1, 2, 3, 4   
-
-def reverse(nums, start, end):
-    while start < end:
-        # Swap the first and last elements
-        nums[start], nums[end] = nums[end], nums[start]
-
-        start += 1
-        end -= 1
+#         for j in range(i+1, len(nums)):
+#             if nums[i] + nums[j] == target:
+#                 return [i, j]  
         
+# # 2 + 7 = 9 //22
+# # 2 + 11 = 13 //22    
+# # 2 + 15 = 17 //22    
+# # 7 + 11 = 18 //22 
+# # 7 + 15 = 22 //22 correct answer 
+            
+# nums = [2,7,11,15]
+# target = 22   
+# print(func(nums, target)) 
 
 
+# ///////Best CASE SCENARIO////////  O(n)  ///////Best CASE SCENARIO//////// 
 
-# Example usage:
-nums = [1, 2, 3, 4, 5, 6, 7]
-# nums = [5, 6, 7, 1, 2, 3, 4 ]
-rotate_array(nums, 3)
-print(nums)
+#nums = [2,7,11,15], target = 22
+
+def func(nums, target):    
+    D = {}  
+    for i ,num in enumerate(nums): # enumerate() method adds a counter to an iterable and returns it in a form of enumerate object. 
+        complement = target - num
+        if complement in D:
+            return [D[complement], i]  
+        D[num] = i 
 
 
+# D ={2:0, 7:1, 11:2, 15:3}    
+        
+nums = [2,7,11,15]
+target = 22
 
-# def func(arr)   :
-#     n = len(arr)
-#     for i in range(n):
-#         for j in range(i+1, n):
-#             if(arr[i] == arr[j]):
-#                 print( i, j)
-#                 return 
+print(func(nums, target))
 
-# arr = [1, 2, 4, 4, 5,5]
-# func(arr)
-# print("done")
+# time complexity is O(n) because the time taken to search for the complement in the dictionary is O(1)
+
 
 
