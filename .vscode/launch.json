@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Satyam Sharma/Desktop/Youtube/Confuse_Coder/DSA/Arrays",
-      "program": "c:/Users/Satyam Sharma/Desktop/Youtube/Confuse_Coder/DSA/Arrays/build/Debug/outDebug",
+      "cwd": ".",
+      "program": "build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
