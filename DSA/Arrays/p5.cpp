@@ -61,3 +61,11 @@ int main()
 
     return 0;
 }
+
+// sort the array
+
+// 1 1 2 2 3 4
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
