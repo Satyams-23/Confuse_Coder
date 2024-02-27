@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      "target": "es6",
+      "module": "commonjs",
+      "outDir": "./dist",
+      "rootDir": "./", // Set rootDir to the root of your project
+      "strict": true,
+      "esModuleInterop": true
+
+    }
+  }
+  
