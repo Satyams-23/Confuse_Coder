@@ -23,22 +23,33 @@ vector<int> evenOdd(vector<int> &nums)
     return nums;
 }
 
-class Solution
+int main()
 {
-public:
-    vector<int> sortArrayByParity(vector<int> &arr)
+    vector<int> nums = {1, 1, 3, 4, 5, 6, 7, 8};
+    vector<int> result = evenOdd(nums);
+    for (int i = 0; i < result.size(); i++)
     {
-        int left = 0, right = arr.size() - 1;
-        int n = arr.size();
-        while (left < right)
-        {
-            while (left < right && arr[left] % 2 == 0)
-                left++;
-            while (right > left && arr[right] % 2 != 0)
-                right--;
-            if (left < right)
-                swap(arr[left], arr[right]);
-        }
-        return arr;
+        cout << result[i] << " ";
     }
-};
+    return 0;
+}
+
+// class Solution
+// {
+// public:
+//     vector<int> sortArrayByParity(vector<int> &arr)
+//     {
+//         int left = 0, right = arr.size() - 1;
+//         int n = arr.size();
+//         while (left < right)
+//         {
+//             while (left < right && arr[left] % 2 == 0)
+//                 left++;
+//             while (right > left && arr[right] % 2 != 0)
+//                 right--;
+//             if (left < right)
+//                 swap(arr[left], arr[right]);
+//         }
+//         return arr;
+//     }
+// };

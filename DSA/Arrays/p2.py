@@ -60,8 +60,8 @@ print(Average)
 #nums = [2,7,11,15], target = 22
 
 def func(nums, target):    
-    D = {}  
-    for i ,num in enumerate(nums): # enumerate() method adds a counter to an iterable and returns it in a form of enumerate object. 
+    D = {}  # empty dictionary 
+    for i ,num in enumerate(nums): # enumerate means to get the index and the value of the array  
         complement = target - num
         if complement in D:
             return [D[complement], i]  

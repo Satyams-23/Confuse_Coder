@@ -47,3 +47,40 @@ int main()
 }
 
 // i = m - 1 j = n - 1 k = m + n - 1
+
+// #nums = [2,7,11,15], target = 22
+
+// Add sum of two numbers in an array
+// #nums = [2,7,11,15], target = 9
+// code here
+// optimal solution
+// #nums = [2,7,11,15], target = 9
+// code here
+
+include<iostream>
+#include <vector>
+    using namespace std;
+
+vector<int> twoSum(vector<int> &nums, int target)
+{
+    vector<int> result;
+    int i = 0, j = nums.size() - 1;
+    while (i < j)
+    {
+        if (nums[i] + nums[j] == target)
+        {
+            result.push_back(i + 1);
+            result.push_back(j + 1);
+            return result;
+        }
+        else if (nums[i] + nums[j] < target)
+        {
+            i++;
+        }
+        else
+        {
+            j--;
+        }
+    }
+    return result;
+}
