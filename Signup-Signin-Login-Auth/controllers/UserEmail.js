@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const generateOTP = require('../utils/generateOTP');
-// const sendEmail = require('../utils/sendEmail');
-
+const sendEmail = require('../utils/senEmail');
 
 const SignupWithOtp = async (req, res) => {
     try {
@@ -26,7 +25,7 @@ const SignupWithOtp = async (req, res) => {
 
         // Generate OTP and set expiration time
         const otp = await generateOTP();
-        const otpExpires = Date.now() + 600000;//
+        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
         // Set user data in session
         req.session.userData = {
@@ -38,7 +37,8 @@ const SignupWithOtp = async (req, res) => {
         };
 
         // Send OTP via email
-        // await sendEmail(email, otp);
+
+        await sendEmail(email, 'OTP for account verification', `Your OTP is ${otp}`);
 
         console.log('Result ', req.session.userData);
 
@@ -151,13 +151,14 @@ const resendotpforsignup = async (req, res) => {
         }
 
         const otp = await generateOTP();
-        const otpExpires = Date.now() + 60000;
+        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
         req.session.userData.otp = otp;
         req.session.userData.otpExpires = otpExpires;
 
         // Send OTP via email
-        // await sendEmail(email, otp);
+        await sendEmail(email, 'OTP for account verification', `Your OTP is ${otp}`);
+
 
         res.json({ message: 'OTP sent for verification', otp: otp });
     } catch (error) {
@@ -170,21 +171,20 @@ const resendotpforsignup = async (req, res) => {
 
 
 
-const Signout = async (req, res) => {
+const Signout = (req, res) => {
     try {
-        const user = req.user;
+        // Clear the user's authentication token or session information
+        req.session.destroy(); // Assuming you're using session-based authentication
 
-        user.token = '';
-
-        await user.save();
-
+        // Respond with a success message or redirect the user to a login page
         res.json({ message: 'User signed out successfully' });
-
     } catch (error) {
-        console.log(error);
+        console.error('Error signing out:', error);
         res.status(500).json({ error: 'Server error' });
     }
-}
+};
+
+
 const forgotpassword = async (req, res) => {
     try {
         const { email } = req.body;
@@ -194,7 +194,7 @@ const forgotpassword = async (req, res) => {
         }
 
         const otp = await generateOTP();
-        const otpExpires = Date.now() + 60000;
+        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
         req.session.userData = {
             email,
@@ -203,7 +203,8 @@ const forgotpassword = async (req, res) => {
         };
 
         // Send OTP via email
-        // await sendEmail(email, otp);
+        await sendEmail(email, 'OTP for password reset', `Your OTP is ${otp}`);
+
 
         res.json({ message: 'OTP sent for password reset', otp: otp });
     } catch (error) {
@@ -274,7 +275,7 @@ const resendotpforforgotpassword = async (req, res) => {
         }
 
         const otp = await generateOTP();
-        const otpExpires = Date.now() + 60000;
+        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
         req.session.userData = {
             email,
@@ -283,7 +284,7 @@ const resendotpforforgotpassword = async (req, res) => {
         };
 
         // Send OTP via email
-        // await sendEmail(email, otp);
+        await sendEmail(email, 'OTP for password reset', `Your OTP is ${otp}`);
 
         res.json({ message: 'OTP sent for password reset', otp: otp });
     } catch (error) {

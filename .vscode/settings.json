@@ -1,6 +1,8 @@
 {
   "cSpell.words": [
-    "confirmpassword"
+    "confirmpassword",
+    "resendotp",
+    "signin"
   ],
   "C_Cpp_Runner.msvcBatchPath": ""
 }
