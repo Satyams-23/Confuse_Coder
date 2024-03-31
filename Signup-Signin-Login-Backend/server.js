@@ -10,23 +10,19 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true })); //
-app.use(cookieparser());
 
 
-app.use(
-    session({
-        secret: config.session_secret, // Generate a new secret key on server restart
+app.use(cors());
+app.use(session
+    ({
+        secret: 'secret',
         resave: false,
         saveUninitialized: true,
-        cookie: {
-            secure: false, // Set to true if your app is served over HTTPS
-            // maxAge: 1000 * 60 * 5,
-            httpOnly: true,
-        },
-    }),
+        cookie: { secure: true }
+    })
 );
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 
 app.use('/api/v1', authRoutes);
