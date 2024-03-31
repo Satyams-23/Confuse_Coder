@@ -40,7 +40,7 @@ const userSchema = new Schema({
 
     role: {
         type: String,
-        default: ['patient', 'doctor']
+        default: 'user'
     },
 
     token: {
