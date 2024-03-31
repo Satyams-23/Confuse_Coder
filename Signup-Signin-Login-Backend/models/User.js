@@ -35,10 +35,14 @@ const userSchema = new Schema({
     resetPasswordExpires: {
         type: Date
     },
+
+    //two roles are there admin and user
+
     role: {
         type: String,
         default: 'user'
     },
+
     token: {
         type: String
     },

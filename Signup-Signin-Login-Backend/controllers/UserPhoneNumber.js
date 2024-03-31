@@ -124,6 +124,8 @@ const RegisterVerification = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
         user.token = token;
+        user.isVerified = true;
+        user.role = 'patient';
         await user.save();
 
 
