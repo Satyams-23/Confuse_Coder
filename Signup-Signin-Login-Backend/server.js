@@ -3,8 +3,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const session = require('express-session');
-const routes = require('./routes/index');
 // ssession middleware
+const authRoutes = require('./routes/authRoutes');
+
 
 const app = express();
 app.use(express.json());
@@ -28,7 +29,7 @@ app.use(
 const PORT = process.env.PORT;
 
 
-app.use('/api/v1', routes);
+app.use('/api/v1', authRoutes);
 
 // app.get('/', (req, res) => {
 //     res.send('Welcome to the server');
