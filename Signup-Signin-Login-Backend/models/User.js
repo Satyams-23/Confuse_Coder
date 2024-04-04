@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
+
+
     email: {
         type: String,
         unique: true
@@ -18,7 +20,8 @@ const userSchema = new Schema({
         type: String,
     },
     otp: {
-        type: String,
+        type: Number,
+
 
     },
     isVerified: {
@@ -55,6 +58,12 @@ const userSchema = new Schema({
 
 
 });
+
+
+//session middleware userData
+
+
+
 
 
 

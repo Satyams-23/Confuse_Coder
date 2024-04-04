@@ -9,18 +9,15 @@ const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies 
 
 
-app.use(cors());
-app.use(session
-    ({
-        secret: 'secret',
-        resave: false,
-        saveUninitialized: true,
-        cookie: { secure: true }
-    })
-);
+app.use(express.json());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+
+
+
+
 
 const PORT = process.env.PORT || 5000;
 
