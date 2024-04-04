@@ -4,6 +4,7 @@ const User = require('../models/User');
 const nodemailer = require('nodemailer');
 const generateOTP = require('../utils/generateOTP');
 const sendEmail = require('../utils/senEmail');
+const session = require('express-session');
 
 const SignupWithOtp = async (req, res) => {
     try {
@@ -17,7 +18,7 @@ const SignupWithOtp = async (req, res) => {
         // Check if user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ error: 'User already exists' });
+            return res.status(400).json({ error: 'User already exists with this email address' });
         }
 
         // Hash password
@@ -25,88 +26,80 @@ const SignupWithOtp = async (req, res) => {
 
         // Generate OTP and set expiration time
         const otp = await generateOTP();
-        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
+        const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 1);
 
-        // Set user data in session
-        req.session.userData = {
+        // create a user object 
+        const newUser = new User({
             email,
-            username,
             password: hashpassword,
+            username,
             otp,
-            otpExpires
-        };
+            otpExpires,
+            isVerified: false
+        });
+
+        await newUser.save();
 
         // Send OTP via email
-
         await sendEmail(email, 'OTP for account verification', `Your OTP is ${otp}`);
-
-        console.log('Result ', req.session.userData);
 
         res.json({ message: 'OTP sent for verification', otp: otp });
     } catch (error) {
         console.error('Error during sign-up:', error);
         res.status(500).json({ error: 'Server error' });
+
     }
-}
-
-
-
-
-
+};
 const SignupWithOtpVerification = async (req, res) => {
     try {
-        const { otp } = req.body;
-        const data = req.session.userData;
+        const { otp, email } = req.body;
+
+        console.log('otp and email', otp, email);
+
+        const data = await User.findOne({ email });
+
+        console.log('data', data);
 
         if (!data) {
             return res.status(400).json({ error: 'User not found' });
         }
 
-        // Convert stored OTP to string for comparison
-        const storedOTP = data.otp.toString();
+        if (!data._id) {
+            return res.status(400).json({ error: 'User ID not found' });
+        }
 
-        // Convert entered OTP to string for comparison
-        const enteredOTP = otp.toString();
+        let storedOTP = data.otp.toString();
+        let enteredOTP = otp.toString();
 
         if (storedOTP !== enteredOTP) {
             return res.status(400).json({ error: 'Invalid OTP' });
         }
 
-        if (data.otpExpires < Date.now()) {
+        if (new Date(data.otpExpires) < Date.now()) {
             return res.status(400).json({ error: 'OTP expired' });
         }
 
-        //token
+
+        // Generate JWT token
         const token = jwt.sign({ data: 'payload' }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-
+        // Update user object with token and verification status
         data.token = token;
-        //delete otp and otpExpires from session and model
-        delete data.otp;
-        delete otp;
-        delete data.otpExpires;
+        data.isVerified = true;
 
+        // Remove OTP and expiration fields
+        data.otp = undefined;
+        data.otpExpires = undefined;
 
+        // Save updated user object
+        await data.save();
 
-
-
-        const user = new User({
-            email: data.email,
-            password: data.password,
-            username: data.username,
-            token: data.token,
-            isVerified: true
-        });
-
-        await user.save();
-
-        res.json({ message: 'User registered successfully' });
+        res.json({ message: 'User verified successfully', token });
     } catch (error) {
-        console.log(error);
+        console.error(error);
         res.status(500).json({ error: 'Server error' });
     }
-
-}
+};
 
 const Signin = async (req, res) => {
     try {
@@ -144,25 +137,55 @@ const Signin = async (req, res) => {
 
 const resendotpforsignup = async (req, res) => {
     try {
-        const { email } = req.session.userData;
+        const { email } = req.body;
 
-        if (!email) {
+        const user = await User.findOne({ email });
+        if (!user) {
             return res.status(400).json({ error: 'User not found' });
+        }
+
+        if (!user.email) {
+            return res.status(400).json({ error: 'Email not found' });
         }
 
         const otp = await generateOTP();
         const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
-        req.session.userData.otp = otp;
-        req.session.userData.otpExpires = otpExpires;
+        user.otp = otp;
+        user.otpExpires = otpExpires;
 
-        // Send OTP via email
+        await user.save();
+
         await sendEmail(email, 'OTP for account verification', `Your OTP is ${otp}`);
 
-
         res.json({ message: 'OTP sent for verification', otp: otp });
+
     } catch (error) {
-        console.error('Error during OTP resend:', error);
+        console.log(error);
+        res.status(500).json({ error: 'Server error' });
+
+    }
+
+}
+
+
+
+
+
+
+
+const Signout = (req, res) => {
+
+
+    try {
+
+
+        req.user.token = '';
+        req.user.save();
+        res.json({ message: 'User signed out successfully' });
+    } catch (error) {
+        console.log(error);
+
         res.status(500).json({ error: 'Server error' });
     }
 
@@ -171,18 +194,6 @@ const resendotpforsignup = async (req, res) => {
 
 
 
-const Signout = (req, res) => {
-    try {
-        // Clear the user's authentication token or session information
-        req.session.destroy(); // Assuming you're using session-based authentication
-
-        // Respond with a success message or redirect the user to a login page
-        res.json({ message: 'User signed out successfully' });
-    } catch (error) {
-        console.error('Error signing out:', error);
-        res.status(500).json({ error: 'Server error' });
-    }
-};
 
 
 const forgotpassword = async (req, res) => {
@@ -196,11 +207,12 @@ const forgotpassword = async (req, res) => {
         const otp = await generateOTP();
         const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
-        req.session.userData = {
-            email,
-            otp,
-            otpExpires
-        };
+        existingUser.otp = otp;
+        existingUser.otpExpires = otpExpires;
+
+        await existingUser.save();
+
+
 
         // Send OTP via email
         await sendEmail(email, 'OTP for password reset', `Your OTP is ${otp}`);
@@ -213,13 +225,22 @@ const forgotpassword = async (req, res) => {
     }
 }
 
+
+
 const resetpassword = async (req, res) => {
     try {
-        const { otp, password, confirmpassword } = req.body;
-        const data = req.session.userData;
+        const { otp, email, password, confirmpassword } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ error: 'User not found' });
+        }
+
+
 
         // Convert stored OTP to string for comparison
-        const storedOTP = data.otp.toString();
+        const storedOTP = user.otp.toString();
 
         // Convert entered OTP to string for comparison
         const enteredOTP = otp.toString();
@@ -230,7 +251,7 @@ const resetpassword = async (req, res) => {
         }
 
         // Check if the stored OTP has expired
-        if (req.session.userData.otpExpires < Date.now()) {
+        if (user.otpExpires < Date.now()) {
             return res.status(400).json({ error: 'OTP expired' });
         }
 
@@ -242,16 +263,16 @@ const resetpassword = async (req, res) => {
         // Generate new password hash
         const hashpassword = await bcrypt.hash(password, 10);
 
-        // Update user's password and remove userData from session
-
-        const user = await User.findOne({ email: req.session.userData.email });
 
         user.password = hashpassword;
+        delete user.otp;
+        delete user.otpExpires;
+
+
 
         console.log('User', user);
 
 
-        delete req.session.userData;
 
         // Save user changes
         await user.save();
@@ -267,7 +288,7 @@ const resetpassword = async (req, res) => {
 
 const resendotpforforgotpassword = async (req, res) => {
     try {
-        const { email } = req.session.userData;
+        const { email } = req.body;
 
         const user = await User.findOne({ email })
         if (!user) {
@@ -277,21 +298,23 @@ const resendotpforforgotpassword = async (req, res) => {
         const otp = await generateOTP();
         const otpExpires = new Date(Date.now() + 1 * 60 * 1000 * 60 * 24);
 
-        req.session.userData = {
-            email,
-            otp,
-            otpExpires
-        };
+        user.otp = otp;
+        user.otpExpires = otpExpires;
 
-        // Send OTP via email
+        await user.save();
+
         await sendEmail(email, 'OTP for password reset', `Your OTP is ${otp}`);
 
         res.json({ message: 'OTP sent for password reset', otp: otp });
+
     } catch (error) {
+
         console.log(error);
         res.status(500).json({ error: 'Server error' });
     }
 }
+
+
 
 
 module.exports = {

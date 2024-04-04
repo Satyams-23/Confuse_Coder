@@ -3,32 +3,26 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 const session = require('express-session');
-const routes = require('./routes/index');
 // ssession middleware
+const authRoutes = require('./routes/authRoutes');
+
 
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: true })); //
-app.use(cookieparser());
+app.use(express.urlencoded({ extended: true })); // Parse URL-encoded bodies 
 
 
-app.use(
-    session({
-        secret: config.session_secret, // Generate a new secret key on server restart
-        resave: false,
-        saveUninitialized: true,
-        cookie: {
-            secure: false, // Set to true if your app is served over HTTPS
-            // maxAge: 1000 * 60 * 5,
-            httpOnly: true,
-        },
-    }),
-);
-
-const PORT = process.env.PORT;
+app.use(express.json());
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 
-app.use('/api/v1', routes);
+
+
+
+const PORT = process.env.PORT || 5000;
+
+
+app.use('/api/v1', authRoutes);
 
 // app.get('/', (req, res) => {
 //     res.send('Welcome to the server');
