@@ -11,6 +11,7 @@ const client = new twilio(accountSid, authToken);
 const sendOTP = async (to, subject, text) => {
     try {
         await client.messages.create({
+
             body: text,
             from: process.env.TWILIO_PHONE_NUMBER,
             to,

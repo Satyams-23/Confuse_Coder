@@ -5,6 +5,7 @@ require('dotenv').config();
 const session = require('express-session');
 // ssession middleware
 const authRoutes = require('./routes/authRoutes');
+const { deleteUnverifiedUsers } = require('./middleware/auth');
 
 
 const app = express();
@@ -21,6 +22,10 @@ app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 
 const PORT = process.env.PORT || 5000;
 
+app.use(deleteUnverifiedUsers);
+
+
+
 
 app.use('/api/v1', authRoutes);
 
@@ -28,6 +33,8 @@ app.use('/api/v1', authRoutes);
 //     res.send('Welcome to the server');
 // }
 // );
+
+
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,

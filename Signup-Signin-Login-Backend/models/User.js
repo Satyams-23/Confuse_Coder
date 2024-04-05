@@ -7,7 +7,6 @@ const userSchema = new Schema({
 
     email: {
         type: String,
-        unique: true
     },
     phoneNumber: {
         type: Number,
@@ -58,12 +57,6 @@ const userSchema = new Schema({
 
 
 });
-
-
-//session middleware userData
-
-
-
 
 
 
