@@ -1,10 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const nodemailer = require('nodemailer');
 const generateOTP = require('../utils/generateOTP');
 const sendEmail = require('../utils/senEmail');
-const session = require('express-session');
 
 const SignupWithOtp = async (req, res) => {
     try {
@@ -16,7 +14,7 @@ const SignupWithOtp = async (req, res) => {
         }
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const existingUser = await User.findOne({ email, isVerified: true });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists with this email address' });
         }
@@ -54,7 +52,7 @@ const SignupWithOtpVerification = async (req, res) => {
     try {
         const { otp, email } = req.body;
 
-        console.log('otp and email', otp, email);
+        // console.log('otp and email', otp, email);
 
         const data = await User.findOne({ email });
 
@@ -64,9 +62,7 @@ const SignupWithOtpVerification = async (req, res) => {
             return res.status(400).json({ error: 'User not found' });
         }
 
-        if (!data._id) {
-            return res.status(400).json({ error: 'User ID not found' });
-        }
+
 
         let storedOTP = data.otp.toString();
         let enteredOTP = otp.toString();
@@ -105,7 +101,7 @@ const Signin = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({
-            email
+            email, isVerified: true
         });
 
         if (!user) {
@@ -134,6 +130,7 @@ const Signin = async (req, res) => {
     }
 
 }
+
 
 const resendotpforsignup = async (req, res) => {
     try {
@@ -290,7 +287,7 @@ const resendotpforforgotpassword = async (req, res) => {
     try {
         const { email } = req.body;
 
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email, isVerified: true })
         if (!user) {
             return res.status(400).json({ error: 'User not found' });
         }

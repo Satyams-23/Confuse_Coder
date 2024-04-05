@@ -7,8 +7,13 @@ const sendOTP = require('../utils/sendOTP');
 const RegisterWithOtp = async (req, res) => {
     try {
         const { phoneNumber } = req.body;
+        // change in string
 
-        const phoneNumberObj = libphonenumber.parsePhoneNumberFromString(phoneNumber, 'IN');// 
+        const phoneNumberString = String(phoneNumber); // Convert to string if not already
+
+
+        const phoneNumberObj = libphonenumber.parsePhoneNumberFromString(phoneNumberString, 'IN');//  mean india code 
+
 
         // Validate phone number
         if (!phoneNumberObj || !phoneNumberObj.isValid()) {
@@ -55,7 +60,7 @@ const RegisterWithOtp = async (req, res) => {
 
         await user.save();
 
-        console.log('Result', req.session.userData);
+        console.log('Result', user);
 
         res.json({ message: 'OTP sent for verification', otp });
     } catch (error) {
@@ -67,6 +72,7 @@ const RegisterWithOtp = async (req, res) => {
 const resendOtp = async (req, res) => {
     try {
         const { phoneNumber } = req.body
+
 
         const user = await User.findOne({ phoneNumber });
 
@@ -91,7 +97,7 @@ const resendOtp = async (req, res) => {
 
 
 
-        console.log('Result', req.session.userData);
+        console.log('Result', user);
 
         res.json({ message: 'OTP resent for verification', otp });
     } catch (error) {
@@ -139,17 +145,18 @@ const RegisterVerification = async (req, res) => {
         delete data.otp;
         delete data.otpExpires;
 
-        // Save user data in database
-        const user = new User({
-            phoneNumber: data.phoneNumber,
-        });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
-        user.token = token;
-        user.isVerified = true;
-        user.role = 'patient';
-        await user.save();
+
+
+        const token = jwt.sign({ id: data._id }, process.env.JWT_SECRET);
+        data.isVerified = true;
+        data.role = 'user';
+        data.token = token;
+        await data.save();
+
+
+
 
 
 

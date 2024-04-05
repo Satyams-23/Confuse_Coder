@@ -116,6 +116,11 @@ const Signup = () => {
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
 
                     <p>Already have an account? <Link to="/login">Login</Link></p>
+                    //login with phonenumber link
+                    <p>Don't have an account? <Link to="/phonenumber">Signup with phonenumber</Link></p>
+
+
+
                 </form>
             )}
             {stage === 'verify' && (
