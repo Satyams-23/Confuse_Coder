@@ -39,10 +39,10 @@ const deleteUnverifiedUsers = async (req, res, next) => {
         const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
         // Find unverified users created more than 1 hour ago
-        const unverifiedUsers = await User.find({ isVerified: false, createdAt: { $lt: oneHourAgo } });
+        const unverifiedUsers = await User.find({ isVerified: false, date: { $lt: oneHourAgo } });
 
         // Delete unverified users
-        await Promise.all(unverifiedUsers.map(user => user.remove()));
+        await Promise.all(unverifiedUsers.map(user => user.deleteOne()));
 
         console.log('Unverified users deleted:', unverifiedUsers.length);
     } catch (error) {
