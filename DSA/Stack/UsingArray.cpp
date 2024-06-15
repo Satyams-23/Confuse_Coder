@@ -12,7 +12,7 @@ class Stack
 public:
     Stack()
     {
-        size = 10;
+        size = 5;
         arr = new int[size];
         top = -1;
     }
@@ -26,7 +26,7 @@ public:
     int pop()
     {
         int x = arr[top];
-        top--;
+        top--; //
         return x;
     }
 
