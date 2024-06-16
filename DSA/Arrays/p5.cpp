@@ -10,20 +10,19 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-
 int funtion1(std::vector<int> &nums)
 {
     std::sort(nums.begin(), nums.end());
 
-    for (size_t i = 1; i < nums.size(); ++i)
+    for (size_t i = 0; i < nums.size(); i++)
     {
-        if (nums[i] == nums[i - 1])
+        if (nums[i] == nums[i + 1])
         {
             return nums[i];
         }
     }
 
-    return -1;
+    return 1;
 }
 
 // flloyd's tortoise and hare algorithm to find the duplicate number
@@ -62,3 +61,11 @@ int main()
 
     return 0;
 }
+
+// sort the array
+
+// 1 1 2 2 3 4
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
