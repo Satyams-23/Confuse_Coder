@@ -100,5 +100,8 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp"
-  }
+  },
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+  ]
 }
