@@ -96,7 +96,6 @@ string infixToPrefix(string s) //
     reverse(res.begin(), res.end());
     return res;
 }
-
 int main()
 {
     string s = "a+b*(c^d-e)^(f+g*h)-i";
