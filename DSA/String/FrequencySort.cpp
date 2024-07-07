@@ -16,10 +16,11 @@ string frequencySort(string s)
 {
     unordered_map<char, int> freq;
     for (char c : s)
+    // for(char c = 0; c < s.size(); c++) // this will give an error because c is a character and we are comparing it with an integer
     {
         // cout << c << " ";
         freq[c]++;
-        // cout << freq[c] << " " << c << endl;
+        cout << freq[c] << " /" << c << endl;
     }
 
     // store the frequency of each character in the string
