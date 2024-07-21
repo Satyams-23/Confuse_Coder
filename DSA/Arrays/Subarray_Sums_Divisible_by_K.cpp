@@ -14,8 +14,8 @@
 // Explanation: There are 7 subarrays with a sum divisible by K = 5:
 // [4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
 // Note:
-// 1 <= A.length <= 30000
-// -10000 <= A[i] <= 10000
+// 1 <= A.length <= 30000 //
+// -10000 <= A[i] <= 10000 //
 // 2 <= K <= 10000
 // What is the solution?
 
@@ -27,37 +27,36 @@
 // Space complexity: O(1)
 
 // code for approach 1
-// #include <iostream>
-// #include <vector>
-// using namespace std;
+#include <iostream>
+#include <vector>
+using namespace std;
 
-// vector<int> subarraySum(vector<int> &nums, int k)
-// {
-//     int n = nums.size();
-//     int count = 0;
-//     for (int i = 0; i < n; i++)
-//     {
-//         int sum = 0; // sum of elements of subarray nums[i, j] where i is fixed and j varies from i to n-1
-//         for (int j = i; j < n; j++)
-//         {
-//             sum += nums[j];
+vector<int> subarraySum(vector<int> &nums, int k)
+{
+    int n = nums.size();
+    int count = 0;
+    for (int i = 0; i < n; i++)
+    {
+        int sum = 0; // sum of elements of subarray nums[i, j] where i is fixed and j varies from i to n-1
+        for (int j = i; j < n; j++)
+        {
+            sum += nums[j];
 
-//             if (sum % k == 0)
+            if (sum % k == 0) // check if sum of subarray is divisible by k or not
+                count++;
+        }
+    }
+    cout << count << endl;
+    return nums;
+}
 
-//                 count++;
-//         }
-//     }
-//     cout << count << endl;
-//     return nums;
-// }
-
-// int main()
-// {
-//     vector<int> nums = {4, 5, 0, -2, -3, 1};
-//     int k = 5;
-//     subarraySum(nums, k);
-//     return 0;
-// }
+int main()
+{
+    vector<int> nums = {4, 5, 0, -2, -3, 1};
+    int k = 5;
+    subarraySum(nums, k);
+    return 0;
+}
 
 // Approach 2: Using HashMap
 // Intuition  ////////////////////////////
@@ -77,42 +76,42 @@
 // Space complexity: O(n)
 
 // code for approach 2
-#include <iostream>
-#include <vector>
-#include <unordered_map>
-using namespace std;
+// #include <iostream>
+// #include <vector>
+// #include <unordered_map>
+// using namespace std;
 
-int subarraySum(vector<int> &nums, int k)
-{
-    unordered_map<int, int> prefixSumCount; // Map to store count of prefix sums modulo k
-    int prefixSum = 0;
-    int count = 0;
+// int subarraySum(vector<int> &nums, int k)
+// {
+//     unordered_map<int, int> prefixSumCount; // Map to store count of prefix sums modulo k
+//     int prefixSum = 0;
+//     int count = 0;
 
-    prefixSumCount[0] = 1; // Initialize with 0 to handle cases where prefix sum itself is divisible by k
+//     prefixSumCount[0] = 1; // Initialize with 0 to handle cases where prefix sum itself is divisible by k
 
-    for (int num = 0; num < nums.size(); num++)
+//     for (int num = 0; num < nums.size(); num++)
 
-    {
+//     {
 
-        prefixSum = (prefixSum + num) % k;
-        if (prefixSum < 0)
-        {
-            // Handle negative prefix sums by adding k to make them positive
-            prefixSum += k;
-        }
-        count += prefixSumCount[prefixSum];
-        prefixSumCount[prefixSum]++;
-    }
+//         prefixSum = (prefixSum + num) % k;
+//         if (prefixSum < 0)
+//         {
+//             // Handle negative prefix sums by adding k to make them positive
+//             prefixSum += k;
+//         }
+//         count += prefixSumCount[prefixSum];
+//         prefixSumCount[prefixSum]++;
+//     }
 
-    cout << "Number of subarrays with sum divisible by " << k << ": " << count << endl;
+//     cout << "Number of subarrays with sum divisible by " << k << ": " << count << endl;
 
-    return count;
-}
+//     return count;
+// }
 
-int main()
-{
-    vector<int> nums = {4, 5, 0, -2, -3, 1};
-    int k = 5;
-    subarraySum(nums, k);
-    return 0;
-}//
+// int main()
+// {
+//     vector<int> nums = {4, 5, 0, -2, -3, 1};
+//     int k = 5;
+//     subarraySum(nums, k);
+//     return 0;
+// } //
