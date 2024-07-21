@@ -192,3 +192,106 @@
 //     cout << find(arr, target, 0) << endl;
 //     return 0;
 // }
+
+// #include <iostream>
+// #include <vector>
+// using namespace std;
+
+// void backtrack(int start, vector<int> &nums, vector<int> &current, vector<vector<int>> &result)
+// {
+//     // Add the current subset to the result
+//     result.push_back(current);
+//     cout << "Added subset: [ ";
+//     for (int num : current)
+//         cout << num << " ";
+//     cout << "]" << endl;
+
+//     // Iterate through the remaining elements to explore subsets
+//     for (int i = start; i < nums.size(); i++)
+//     {
+//         cout << "Include element " << nums[i] << " and recurse" << endl;
+//         // Include the element
+//         current.push_back(nums[i]);
+
+//         // Recurse
+//         backtrack(i + 1, nums, current, result);
+
+//         // Exclude the element (backtrack)
+//         cout << "Exclude element " << nums[i] << " and backtrack" << endl;
+//         current.pop_back();
+//     }
+// }
+
+// vector<vector<int>> subsets(vector<int> &nums)
+// {
+//     vector<vector<int>> result;
+//     vector<int> current;
+//     backtrack(0, nums, current, result);
+//     return result;
+// }
+
+// int main()
+// {
+//     vector<int> nums = {1, 2, 3};
+//     vector<vector<int>> result = subsets(nums);
+
+//     cout << "All subsets: " << endl;
+//     for (const auto &subset : result)
+//     {
+//         cout << "[ ";
+//         for (int num : subset)
+//             cout << num << " ";
+//         cout << "]" << endl;
+//     }
+
+//     return 0;
+// }
+
+#include <vector>
+#include <iostream>
+
+void backtrack(std::vector<int> &candidates, int target, std::vector<std::vector<int>> &result, std::vector<int> &combination, int start)
+{
+    if (target == 0)
+    {
+        result.push_back(combination);
+        return;
+    }
+    for (int i = start; i < candidates.size(); i++)
+    {
+        if (candidates[i] <= target)
+        {
+            combination.push_back(candidates[i]);
+            backtrack(candidates, target - candidates[i], result, combination, i);
+            combination.pop_back(); // backtrack
+        }
+    }
+}
+
+std::vector<std::vector<int>> combinationSum(std::vector<int> &candidates, int target)
+{
+    std::vector<std::vector<int>> result;
+    std::vector<int> combination;
+    backtrack(candidates, target, result, combination, 0);
+    return result;
+}
+
+int main()
+{
+    std::vector<int> candidates = {2, 3, 6, 7};
+    int target = 7;
+    std::vector<std::vector<int>> result = combinationSum(candidates, target);
+
+    std::cout << "Combinations that sum to " << target << ":" << std::endl;
+    for (const auto &combination : result)
+    {
+        std::cout << "[";
+        for (int num : combination)
+        {
+            std::cout << num << " ";
+        }
+        std::cout << "]" << std::endl;
+    }
+
+    return 0;
+}

@@ -1,19 +1,19 @@
 
 
 
-function* generator() {
-    yield 1;
-    yield 2;
-}
+// function* generator() {
+//     yield 1;
+//     yield 2;
+// }
 
-const gen = generator();
-const sym = Symbol('unique');//
+// const gen = generator();
+// const sym = Symbol('unique');//
 
-gen[sym] = function () {
-    return this.next().value;//
-};
+// gen[sym] = function () {
+//     return this.next().value;//
+// };
 
-console.log(gen[sym](), gen[sym](), gen[sym]());//
+// console.log(gen[sym](), gen[sym](), gen[sym]());//
 
 
 
@@ -32,3 +32,40 @@ console.log(gen[sym](), gen[sym](), gen[sym]());//
 
 
 
+
+
+
+
+
+// const obj = { a: 1, b: 2 };
+
+// const proxy = new Proxy(obj, {
+//     get(target, prop) {
+//         return prop in target ? target[prop] : 0;
+//     }
+// });
+
+// console.log(proxy.a, proxy.b, proxy.c);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const array = [1, 2, 3, 4, 5];
+
+const [first, second, ...rest] = array;
+
+const modified = rest.map(
+    (n, i) => i % 2 === 0 ? n * 2 : n
+);
+
+console.log(first, second, modified);
