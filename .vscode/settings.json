@@ -1,9 +1,11 @@
 {
   "cSpell.words": [
     "confirmpassword",
+    "mappls",
     "Rearrangeby",
     "resendotp",
-    "signin"
+    "signin",
+    "totalhero"
   ],
   "C_Cpp_Runner.msvcBatchPath": "",
   "files.associations": {
@@ -100,5 +102,9 @@
     "typeinfo": "cpp",
     "valarray": "cpp",
     "variant": "cpp"
-  }
+  },
+  "githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+  ],
+  "C_Cpp.errorSquiggles": "disabled"
 }
