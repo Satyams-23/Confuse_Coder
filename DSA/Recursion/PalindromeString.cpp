@@ -1,34 +1,34 @@
-// PalindromeString - Check if a string is palindrome or not
+// // PalindromeString - Check if a string is palindrome or not
 
-// brute force approach - reverse the string and check if it is equal to the original string
-#include <iostream>
-#include <string>
-using namespace std;
+// // brute force approach - reverse the string and check if it is equal to the original string
+// #include <iostream>
+// #include <string>
+// using namespace std;
 
-bool isPalindrome(string s)
-{
-    int start = 0;
-    int end = s.size() - 1;
+// bool isPalindrome(string s)
+// {
+//     int start = 0;
+//     int end = s.size() - 1;
 
-    while (start < end)
-    {
-        if (s[start++] != s[end--])
-        {
-            return false;
-            cout << "0" << endl;
-        }
-        cout << "1" << endl;
-    }
-    return true;
-    cout << "1" << endl;
-}
+//     while (start < end)
+//     {
+//         if (s[start++] != s[end--])
+//         {
+//             return false;
+//             cout << "0" << endl;
+//         }
+//         cout << "1" << endl;
+//     }
+//     return true;
+//     cout << "1" << endl;
+// }
 
-int main()
-{
-    string s = "madam1";
-    isPalindrome(s);
-    return 0;
-}
+// int main()
+// {
+//     string s = "madam";
+//     isPalindrome(s);
+//     return 0;
+// }
 
 // Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
 
@@ -127,3 +127,61 @@ int main()
 // Space Complexity: O(n)
 
 // Optimized approach - backtracking
+
+#include <iostream>
+#include <vector>
+#include <string>
+using namespace std;
+
+bool isPalindrome(string s)
+{
+    int i = 0, j = s.size() - 1;
+    while (i < j)
+    {
+        if (s[i] != s[j]) //
+        {
+            return false;
+        }
+        i++;
+        j--;
+    }
+    return true;
+}
+
+void partition(string s, vector<string> &path, vector<vector<string>> &result, int start)
+{
+    if (start == s.size())
+    {
+        result.push_back(path);
+
+        return;
+    }
+
+    for (int i = start; i < s.size(); i++)
+    {
+        string prefix = s.substr(start, i - start + 1);
+        cout << "Prefix: " << prefix << endl;
+
+        if (isPalindrome(prefix))
+        {
+            path.push_back(prefix);
+
+            partition(s, path, result, i + 1);
+
+            path.pop_back();
+        }
+    }
+
+    return;
+}
+
+int main()
+{
+    string s = "aabb";
+    vector<vector<string>> result;
+    vector<string> path;
+    partition(s, path, result, 0);
+
+    cout << "Final Result: " << endl;
+    return 0;
+}
