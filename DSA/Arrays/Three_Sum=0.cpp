@@ -1,70 +1,53 @@
-#include <iostream>
-#include <vector>
-#include <algorithm>
-
-using namespace std;
-
-vector<vector<int>> threeSum(vector<int> &nums)
+class Solution
 {
-    vector<vector<int>> res;
-
-    sort(nums.begin(), nums.end());
-
-    int n = nums.size();
-
-    for (int i = 0; i < n; i++)
+public:
+    vector<vector<int>> threeSum(vector<int> &nums)
     {
-        if (i > 0 && nums[i] == nums[i - 1])
+        vector<vector<int>> result;
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+
+        for (int i = 0; i < n; i++)
         {
-            continue;
+
+            if (i > 0 && nums[i] == nums[i - 1])
+            {
+                continue;
+            }
+
+            int L = i + 1;
+            int R = n - 1;
+
+            while (L < R)
+            {
+
+                int sum = nums[i] + nums[L] + nums[R];
+
+                if (sum == 0)
+                {
+
+                    result.push_back({nums[i], nums[L], nums[R]});
+                    while (L < R && nums[L] == nums[L + 1])
+                    {
+                        L++;
+                    }
+                    while (L < R && nums[R] == nums[R - 1])
+                    {
+                        R--;
+                    }
+                    L++;
+                    R--;
+                }
+                else if (sum > 0)
+                {
+                    R--;
+                }
+                else
+                {
+                    L++;
+                }
+            }
         }
-
-        int l = i + 1;
-        int r = n - 1;
-        while (l < r)
-        {
-            int sum = nums[i] + nums[l] + nums[r];
-            if (sum < 0)
-            {
-                l++;
-            }
-            else if (sum > 0)
-            {
-                r--;
-            }
-            else
-            {
-                res.push_back({nums[i], nums[l], nums[r]});
-
-                // Commented out duplicate skipping code
-                // while (l < r && nums[l] == nums[l + 1])
-                // {
-                //     l++;
-                // }
-                // while (l < r && nums[r] == nums[r - 1])
-                // {
-                //     r--;
-                // }
-
-                l++;
-                r--;
-            }
-        }
+        return result;
     }
-    return res;
-}
-
-int main()
-{
-    vector<int> nums = {-1, 0, 1, 2, -1, -4};
-    vector<vector<int>> res = threeSum(nums);
-    for (auto i : res)
-    {
-        for (auto j : i)
-        {
-            cout << j << " ";
-        }
-        cout << endl;
-    }
-    return 0;
-}
+};
