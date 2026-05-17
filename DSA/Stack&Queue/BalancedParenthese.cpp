@@ -40,4 +40,11 @@ bool isBalanced(string s)
             }
             st.pop();
         }
+        else
+        {
+            return false;
+        }
     }
+
+    return st.empty();
+}
