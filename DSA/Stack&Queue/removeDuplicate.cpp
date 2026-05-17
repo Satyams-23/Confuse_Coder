@@ -51,6 +51,7 @@ string removeDuplicate2(string s, int k)
                 st.pop();
             }
         }
+        
         else
         {
             st.push({c, 1});
