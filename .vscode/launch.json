@@ -55,8 +55,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": ".",
-      "program": "build/Debug/outDebug",
+      "cwd": "c:/Users/Dell/Desktop/Confuse_Coder/DSA/Stack&Queue",
+      "program": "c:/Users/Dell/Desktop/Confuse_Coder/DSA/Stack&Queue/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [
